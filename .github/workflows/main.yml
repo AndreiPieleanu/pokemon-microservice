@@ -22,6 +22,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Compile the application
         run: ./gradlew assemble
+      - name: Generate JaCoCo test report
+        run: ./gradlew jacocoTestReport
 
   test:
     needs: compile

@@ -4,7 +4,7 @@ The microservice for pokemons!
 
 Here I will present the project's setup steps, how to run it and how to add new features! 
 
-## Pre-requisites
+## Pre-requisites 🧾
 
 You will need to download the following applications in order to benefit from this project's code: 
 - [Docker](https://www.docker.com/products/docker-desktop/)
@@ -15,11 +15,11 @@ You will need to download the following applications in order to benefit from th
 
 `docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management`
 
-## How to use
+## How to use 🔎
 
 There are 2 options of using this project: via Docker or via repository cloning.
 
-### Docker way
+### Docker way 🐳
 
 For Docker way, we need to create a network where our pokemon app can access RabbitMQ. To create a network named `pokemon-network`, open a cmd file and type the following command: 
 
@@ -49,7 +49,7 @@ Run both projects and wait 1-2 minutes for them to boot. Then, open Postman and 
 - get pokemon with id 1: `GET http://localhost:8080/pokemon/1`
 - get external pokemons: `GET http://localhost:8080/pokemon/external`
 
-### Project way
+### Project way 💻
 
 Make sure you have the RabbitMQ image pulled first, consult **Pre-requisites** to see how you do it. Then, create a RabbitMQ container within `pokemon-network` network and assign ports `5672` and `15672` to it: 
 
@@ -84,7 +84,7 @@ This template is using [**GitHub Actions**](https://github.com/cortinico/kotlin-
 There are currently the following workflows available:
 - [CI/CD pipeline](.github/workflows/main.yml) - Will compile, test, measure and push new Docker image to hub. 
 
-## Testing
+## Testing 🧪
 The project contains unit tests and integration tests. We do unit tests on the service layer, as most logic can be found there and integration tests on the controller. The total unit test coverage is 94% and 31% for integration tests, simply to prove that it works. To generate a new test report, write the following command in a cmd within the repository workspace: 
 
 `./gradlew test jacocoTestReport`
@@ -95,7 +95,7 @@ The newly generated report can be found at `build/customJacocoReportDir/test/jac
 - SonarQube/SonarCloud for monitoring and ensuring high-quality, bug-free code.
 - more features
 
-# Architecture
+# Architecture 👨‍💻
 My application consists of a single microservice called `pokemon-microservice`. This microservice is comprised of 3 layers: data/repository layer, service/business layer and controller/layer. 
 ![c1](https://github.com/user-attachments/assets/54e1c84e-fee2-4da4-92a9-f85e96ef976b)
 ![c2](https://github.com/user-attachments/assets/9d4fc332-bad4-4f20-a9f5-d95e09d96d54)
@@ -104,7 +104,7 @@ My application consists of a single microservice called `pokemon-microservice`. 
 
 Controller layer communicates with Postman interface via HTTP requests. It sends the commands to IService layer which handles the logic. The data is retrieved from H2 database via the data layer. DTO classes are used to handle the database elements thanks to JPA. The microservice is built in such a way it fires RabbitMQ events that can be listened to by other microservices if developers wishes to add. 
 
-## RabbitMQ
+## RabbitMQ 🐇
 
 We have a main exchange `pokemon-exchange` with 1 queue and 1 routing key for each CRUD operation (4 in total). Each microservice must have 4 classes and be configured as follwing: 
 - `RabbitMQConfig`: configuration for RabbitMQ by setting up exchanges, queues, and communication channels

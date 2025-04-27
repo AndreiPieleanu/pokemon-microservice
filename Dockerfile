@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy built jar file
-COPY build/libs/*.jar app.jar
+COPY build/libs/pokemon-0.0.1-SNAPSHOT.jar app/pokemon-service.jar
 
 # Expose port (change if needed)
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app/pokemon-service.jar"]

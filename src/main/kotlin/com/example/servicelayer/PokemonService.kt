@@ -20,6 +20,10 @@ class PokemonService(private val repository: IPokemonRepository, private val eve
         return repository.findById(id).orElseThrow()
     }
     override fun addNewPokemon(pokemon: Pokemon): Pokemon{
+        val foundPokemon = repository.findAll().firstOrNull { p -> p.equals(pokemon) }
+        if(foundPokemon != null){
+            throw IllegalArgumentException("Pokemons must have unique names!")
+        }
         eventProducer.publishPokemonCreatedEvent(PokemonCreatedEvent(pokemon.id, pokemon.name, pokemon.type))
         return repository.save(pokemon)
     }

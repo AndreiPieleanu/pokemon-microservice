@@ -80,6 +80,7 @@ class PokemonServiceTest {
         // Arrange
         val pokemon = Pokemon(1, "Pikachu", "Gold")
         whenever(pokemonRepository.save(pokemon)).thenReturn(pokemon)
+        whenever(pokemonRepository.findAll()).thenReturn(listOf())
         // Act
         val result = pokemonService.addNewPokemon(pokemon)
         // Assert
@@ -88,6 +89,18 @@ class PokemonServiceTest {
         assertNotNull(result.type)
         assertEquals(result.name, pokemon.name)
         assertEquals(result.type, pokemon.type)
+    }
+
+    @Test
+    fun addNewPokemonShouldThrowExceptionWhenPokemonWithSameNameFound(){
+        // Arrange
+        val pokemon = Pokemon(1, "Pikachu", "Gold")
+        whenever(pokemonRepository.save(pokemon)).thenReturn(pokemon)
+        whenever(pokemonRepository.findAll()).thenReturn(listOf(pokemon))
+        // Act & Assert
+        assertThrows<IllegalArgumentException> {
+            pokemonService.addNewPokemon(pokemon)
+        }
     }
 
     @Test

@@ -64,7 +64,7 @@ tasks.withType<Test> {
 
 tasks.test {
 	useJUnitPlatform()
-	finalizedBy(tasks.jacocoTestReport)
+	finalizedBy(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
 }
 
 tasks.jacocoTestReport {
@@ -74,4 +74,43 @@ tasks.jacocoTestReport {
 		html.required.set(true)
 		csv.required.set(false)
 	}
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude("com/example/controller/**")
+				exclude("com/example/datalayer/**")
+				exclude("com/example/dto/**")
+				include("com/example/servicelayer/**")
+				exclude("com/example/rabbitmq/**")
+				exclude("com/example/PokemonMicroserviceApplication.kt")
+			}
+		})
+	)
+}
+
+tasks.jacocoTestCoverageVerification {
+	dependsOn(tasks.test)
+	violationRules {
+		rule {
+			limit {
+				minimum = "0.8".toBigDecimal()
+			}
+		}
+	}
+	classDirectories.setFrom(
+		files(classDirectories.files.map {
+			fileTree(it) {
+				exclude("com/example/controller/**")
+				exclude("com/example/datalayer/**")
+				exclude("com/example/dto/**")
+				include("com/example/servicelayer/**")
+				exclude("com/example/rabbitmq/**")
+				exclude("com/example/PokemonMicroserviceApplication.kt")
+			}
+		})
+	)
+}
+
+tasks.check {
+	dependsOn(tasks.jacocoTestCoverageVerification)
 }
